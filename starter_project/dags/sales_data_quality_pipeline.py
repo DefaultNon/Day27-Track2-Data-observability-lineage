@@ -17,7 +17,6 @@ if str(PROJECT_ROOT) not in sys.path:
 
 def validate_orders_task() -> dict:
     """
-    TODO:
     1. Import config values.
     2. Read the input CSV.
     3. Validate the rows.
@@ -25,7 +24,19 @@ def validate_orders_task() -> dict:
     5. Send the Discord alert.
     6. Raise an error on failed validation.
     """
-    raise NotImplementedError
+    from src.config import AIRFLOW_INPUT_FILE, SUMMARY_FILE
+    from src.validation import run_lab_check
+
+    print(f"Starting validation for file: {AIRFLOW_INPUT_FILE}")
+    
+    # run_lab_check handles reading, validating, writing summary, and sending discord alert
+    summary = run_lab_check(
+        input_path=AIRFLOW_INPUT_FILE,
+        output_path=SUMMARY_FILE,
+    )
+    
+    print(f"Validation completed. Status: {summary['validation_status']}")
+    return summary
 
 
 if DAG is not None:
